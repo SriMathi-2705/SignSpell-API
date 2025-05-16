@@ -1,0 +1,194 @@
+swagger: "2.0"
+info:
+  title: "User Authentication API"
+  version: "1.0.0"
+  description: "signup, login, token refresh, password reset, CRUD, logout"
+basePath: "/"
+schemes:
+  - http
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - Auth
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - str_First_Name
+              - str_Last_Name
+              - str_Location
+              - str_Email
+              - str_Password
+            properties:
+              str_First_Name: { type: string }
+              str_Last_Name:  { type: string }
+              str_Location:   { type: string }
+              str_Email:      { type: string }
+              str_Password:   { type: string, format: password }
+      responses:
+        "201": { description: User created }
+        "400": { description: Missing fields }
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - str_Email
+              - str_Password
+            properties:
+              str_Email:    { type: string }
+              str_Password: { type: string, format: password }
+      responses:
+        "200": { description: Login successful }
+        "400": { description: Missing fields }
+        "401": { description: Invalid credentials }
+  /auth/refresh:
+    post:
+      tags:
+        - Auth
+      security:
+        - Bearer: []
+      responses:
+        "200": { description: New access token }
+  /auth/logout:
+    post:
+      tags:
+        - Auth
+      security:
+        - Bearer: []
+      responses:
+        "200": { description: Logout successful }
+  /auth/forgot:
+    post:
+      tags:
+        - Auth
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required: [str_Email]
+            properties:
+              str_Email: { type: string }
+      responses:
+        "200": { description: Reset link sent }
+        "400": { description: Missing email }
+        "404": { description: Email not found }
+  /auth/reset/{token}:
+    post:
+      tags:
+        - Auth
+      parameters:
+        - in: path
+          name: token
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required: [str_Password]
+            properties:
+              str_Password: { type: string, format: password }
+      responses:
+        "200": { description: Password reset successful }
+        "400": { description: Token error or missing password }
+  /users:
+    get:
+      tags:
+        - User
+      security:
+        - Bearer: []
+      responses:
+        "200": { description: List of users }
+    post:
+      tags:
+        - User
+      security:
+        - Bearer: []
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - str_First_Name
+              - str_Last_Name
+              - str_Email
+              - str_Password
+            properties:
+              str_First_Name: { type: string }
+              str_Last_Name:  { type: string }
+              str_Location:   { type: string }
+              str_Email:      { type: string }
+              str_Password:   { type: string, format: password }
+      responses:
+        "201": { description: User created }
+        "400": { description: Missing fields }
+  /users/{lng_User_ID}:
+    get:
+      tags:
+        - User
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: lng_User_ID
+          required: true
+          type: integer
+      responses:
+        "200": { description: User details }
+    put:
+      tags:
+        - User
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: lng_User_ID
+          required: true
+          type: integer
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              str_First_Name: { type: string }
+              str_Last_Name:  { type: string }
+              str_Email:      { type: string }
+              str_Password:   { type: string, format: password }
+      responses:
+        "200": { description: Update result }
+    delete:
+      tags:
+        - User
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: lng_User_ID
+          required: true
+          type: integer
+      responses:
+        "200": { description: Deletion result }
+definitions:
+  # you can add shared definitions here if you like
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: JWT bearer token
