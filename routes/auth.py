@@ -101,7 +101,7 @@ def forgot_password():
 
         token = serializer.dumps(email, salt='pw-reset')
         link  = url_for('auth_bp.reset_password', token=token, _external=True)
-        # TODO: send `link` via email
+        # TODO: send link via email
         return jsonify({'ErrorCode': '9999', 'reset_url': link}), 200
 
     except Exception:
