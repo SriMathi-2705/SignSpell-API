@@ -5,12 +5,17 @@ import logging
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 # 1) Load .env (for local dev) and Render env vars automatically
 load_dotenv()
 
 # 2) Create the Flask app
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": [
+    "https://signspell-api.onrender.com",   # Swagger UI on Render
+   # "https://your-frontend-domain.com"      # Replace with actual frontend domain
+]}})
 
 # 3) Load config from Config class (reads SECRET_KEY, JWT settings, etc.)
 from config import Config

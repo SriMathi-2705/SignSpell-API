@@ -5,7 +5,7 @@ info:
   description: "signup, login, token refresh, password reset, CRUD, logout"
 basePath: "/"
 schemes:
-  - http
+  - https
 paths:
   /auth/signup:
     post:
