@@ -20,7 +20,7 @@ class User:
     def save_user_service(data: dict) -> dict:
         try:
             # 1) Required fields
-            required = ['str_Email', 'str_First_Name', 'str_Last_Name', 'str_Location', 'str_Password', 'User_ID']
+            required = ['str_Email', 'str_First_Name', 'str_Last_Name', 'str_Location', 'str_Password']
             missing = [f for f in required if not data.get(f)]
             if missing:
                 return {'ErrorCode': 9997, 'Message': f'Missing fields: {missing}'}
