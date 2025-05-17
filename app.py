@@ -13,8 +13,13 @@ load_dotenv()
 # 2) Create the Flask app
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": [
-    "https://signspell-api.onrender.com",   # Swagger UI on Render
-   # "https://your-frontend-domain.com"      # Replace with actual frontend domain
+    "https://signspell-api.onrender.com",   # Render deployment (backend)
+   # "https://your-frontend-domain.com",     # Replace with your real frontend URL (if hosted)
+
+    "http://localhost:3000",                # Local frontend dev (React, etc.)
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5000",                # Local backend via Swagger UI
+    "http://192.168.1.7:5000"               # Local backend via IP
 ]}})
 
 # 3) Load config from Config class (reads SECRET_KEY, JWT settings, etc.)
