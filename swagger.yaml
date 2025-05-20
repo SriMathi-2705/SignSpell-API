@@ -2,18 +2,25 @@ swagger: "2.0"
 info:
   title: "User Authentication API"
   version: "1.0.0"
-  description: "signup, login, token refresh, password reset, CRUD, logout"
+  description: "Signup, Login, Token Refresh, Password Reset, CRUD, Logout"
+# no fixed host → Swagger UI will use whatever host it's served from
 basePath: "/"
 schemes:
-  - https
+  - http      # for local development
+  - https     # for Render (or any HTTPS deployment)
+consumes:
+  - application/json
+produces:
+  - application/json
+
 paths:
   /auth/signup:
     post:
-      tags:
-        - Auth
+      tags: [Auth]
+      summary: User signup
       parameters:
         - in: body
-          name: body
+          name: user
           required: true
           schema:
             type: object
@@ -30,15 +37,16 @@ paths:
               str_Email:      { type: string }
               str_Password:   { type: string, format: password }
       responses:
-        "201": { description: User created }
-        "400": { description: Missing fields }
+        201: { description: User created }
+        400: { description: Missing fields }
+
   /auth/login:
     post:
-      tags:
-        - Auth
+      tags: [Auth]
+      summary: User login
       parameters:
         - in: body
-          name: body
+          name: credentials
           required: true
           schema:
             type: object
@@ -49,32 +57,35 @@ paths:
               str_Email:    { type: string }
               str_Password: { type: string, format: password }
       responses:
-        "200": { description: Login successful }
-        "400": { description: Missing fields }
-        "401": { description: Invalid credentials }
+        200: { description: Login successful }
+        400: { description: Missing fields }
+        401: { description: Invalid credentials }
+
   /auth/refresh:
     post:
-      tags:
-        - Auth
+      tags: [Auth]
+      summary: Refresh access token
       security:
         - Bearer: []
       responses:
-        "200": { description: New access token }
+        200: { description: New access token }
+
   /auth/logout:
     post:
-      tags:
-        - Auth
+      tags: [Auth]
+      summary: Logout user
       security:
         - Bearer: []
       responses:
-        "200": { description: Logout successful }
+        200: { description: Logout successful }
+
   /auth/forgot:
     post:
-      tags:
-        - Auth
+      tags: [Auth]
+      summary: Forgot password
       parameters:
         - in: body
-          name: body
+          name: email
           required: true
           schema:
             type: object
@@ -82,20 +93,21 @@ paths:
             properties:
               str_Email: { type: string }
       responses:
-        "200": { description: Reset link sent }
-        "400": { description: Missing email }
-        "404": { description: Email not found }
+        200: { description: Reset link sent }
+        400: { description: Missing email }
+        404: { description: Email not found }
+
   /auth/reset/{token}:
     post:
-      tags:
-        - Auth
+      tags: [Auth]
+      summary: Reset password
       parameters:
         - in: path
           name: token
           required: true
           type: string
         - in: body
-          name: body
+          name: password
           required: true
           schema:
             type: object
@@ -103,24 +115,25 @@ paths:
             properties:
               str_Password: { type: string, format: password }
       responses:
-        "200": { description: Password reset successful }
-        "400": { description: Token error or missing password }
+        200: { description: Password reset successful }
+        400: { description: Token error or missing password }
+
   /users:
     get:
-      tags:
-        - User
+      tags: [User]
+      summary: Get all users
       security:
         - Bearer: []
       responses:
-        "200": { description: List of users }
+        200: { description: List of users }
     post:
-      tags:
-        - User
+      tags: [User]
+      summary: Create a new user
       security:
         - Bearer: []
       parameters:
         - in: body
-          name: body
+          name: user
           required: true
           schema:
             type: object
@@ -136,12 +149,13 @@ paths:
               str_Email:      { type: string }
               str_Password:   { type: string, format: password }
       responses:
-        "201": { description: User created }
-        "400": { description: Missing fields }
+        201: { description: User created }
+        400: { description: Missing fields }
+
   /users/{lng_User_ID}:
     get:
-      tags:
-        - User
+      tags: [User]
+      summary: Get user details
       security:
         - Bearer: []
       parameters:
@@ -150,10 +164,11 @@ paths:
           required: true
           type: integer
       responses:
-        "200": { description: User details }
+        200: { description: User details }
+
     put:
-      tags:
-        - User
+      tags: [User]
+      summary: Update user
       security:
         - Bearer: []
       parameters:
@@ -162,7 +177,7 @@ paths:
           required: true
           type: integer
         - in: body
-          name: body
+          name: user
           schema:
             type: object
             properties:
@@ -171,10 +186,11 @@ paths:
               str_Email:      { type: string }
               str_Password:   { type: string, format: password }
       responses:
-        "200": { description: Update result }
+        200: { description: Update result }
+
     delete:
-      tags:
-        - User
+      tags: [User]
+      summary: Delete user
       security:
         - Bearer: []
       parameters:
@@ -183,12 +199,11 @@ paths:
           required: true
           type: integer
       responses:
-        "200": { description: Deletion result }
-definitions:
-  # you can add shared definitions here if you like
+        200: { description: Deletion result }
+
 securityDefinitions:
   Bearer:
     type: apiKey
     name: Authorization
     in: header
-    description: JWT bearer token
+    description: "JWT Bearer token"

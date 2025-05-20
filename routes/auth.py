@@ -58,6 +58,7 @@ def login():
         uid = str(row.lng_User_ID)
         return jsonify({
             'ErrorCode': '9999',
+            'Message' : 'Login Successful',
             'access_token':  create_access_token(identity=uid, fresh=True),
             'refresh_token': create_refresh_token(identity=uid)
         }), 200
