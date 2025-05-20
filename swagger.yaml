@@ -3,11 +3,7 @@ info:
   title: "User Authentication API"
   version: "1.0.0"
   description: "Signup, Login, Token Refresh, Password Reset, CRUD, Logout"
-# no fixed host → Swagger UI will use whatever host it's served from
 basePath: "/"
-schemes:
-  - http      # for local development
-  - https     # for Render (or any HTTPS deployment)
 consumes:
   - application/json
 produces:
