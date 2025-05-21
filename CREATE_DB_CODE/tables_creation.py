@@ -35,7 +35,7 @@ def init_db():
     """
     try:
         metadata.create_all(engine, checkfirst=True)
-        print("✅ Tables created or already exist.")
+        #print("✅ Tables created or already exist.")
     except Exception:
         logging.exception("Table creation failed")
 

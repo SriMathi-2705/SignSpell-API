@@ -59,16 +59,14 @@ def login():
         return jsonify({
             'ErrorCode': '9999',
             'Message' : 'Login Successful',
+            'lng_User_ID': uid,
             'access_token':  create_access_token(identity=uid, fresh=True),
             'refresh_token': create_refresh_token(identity=uid)
         }), 200
-
-    except SQLAlchemyError:
-        logging.exception('login')
-        return jsonify({'ErrorCode': 9998, 'Message': 'Database error'}), 500
     except Exception:
         logging.exception('login')
         return jsonify({'ErrorCode': 9998, 'Message': 'Internal error'}), 500
+
 
 
 @auth_bp.route('/refresh', methods=['POST'])
